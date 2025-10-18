@@ -1,0 +1,26 @@
+@Security.Sanitization.Api_HostAddress = http://localhost:5039
+
+GET {{Security.Sanitization.Api_HostAddress}}/test-injected-headers
+Accept: application/json
+X-Custom-Header: <script>alert('xss')</script>Hello world!
+
+###
+
+POST {{Security.Sanitization.Api_HostAddress}}/test-injected-top-level-body
+Accept: application/json
+Content-Type: application/json
+{
+  "ToplevelMalice": "<script>alert('xss')</script><b>Bold Text</b>"
+}
+
+###
+
+POST {{Security.Sanitization.Api_HostAddress}}/test-injected-nesting-body
+Accept: application/json
+Content-Type: application/json
+{
+  "ToplevelMalice": "<script>alert('xss')</script><b>Safe</b>",
+  "NestedLevelMalice": [
+    "<img src='test.jpg' onerror='alert(1)' />"
+  ]
+}

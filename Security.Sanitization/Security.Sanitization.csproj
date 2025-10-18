@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    
+    <PackageId>Security.Sanitization</PackageId>
+    <Version>2.1.3</Version>
+    <Authors>SBSA IAM Short-term Insurance Technical Team</Authors>
+    <Company>SBSA</Company>
+    <Description>Middleware to sanitize HTTP headers and JSON request bodies</Description>
+    <PackageTags>security;sanitizer;aspnetcore;xss</PackageTags>
+    <RepositoryUrl>https://standardbank.visualstudio.com/StandardBankInsurance/_git/Insurance.Security.XssPrevention</RepositoryUrl>
+    <PackageReleaseNotes>Header/body sanitization</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HtmlSanitizer" Version="9.0.886" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+</Project>
