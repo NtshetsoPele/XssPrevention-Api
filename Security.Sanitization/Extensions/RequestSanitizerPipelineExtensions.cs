@@ -2,51 +2,57 @@
 
 public static class RequestSanitizerPipelineExtensions
 {
-    public static IApplicationBuilder UseRequestHeadersSanitizer(this IApplicationBuilder app) =>
-        app.UseMiddleware<RequestHeadersSanitizerMiddleware>();
-
-    public static IApplicationBuilder UseRequestBodySanitizer(this IApplicationBuilder app) =>
-        app.UseMiddleware<RequestBodySanitizerMiddleware>();
-
-    public static IApplicationBuilder UseRequestHeadersAndBodySanitizers(this IApplicationBuilder app) =>
-        app.UseRequestHeadersSanitizer().UseRequestBodySanitizer();
-
-    public static RouteHandlerBuilder MapXssHeaderTestRoute(this WebApplication webApp, string injectedHeadersUrl)
+    extension(IApplicationBuilder app)
     {
-        return 
-            webApp.MapGet(injectedHeadersUrl, (HttpRequest request) =>
-                request.Headers.ToDictionary(
-                    keyValuePair => keyValuePair.Key,
-                    keyValuePair => keyValuePair.Value.ToString()));
+        public IApplicationBuilder UseRequestHeadersSanitizer() =>
+            app.UseMiddleware<RequestHeadersSanitizerMiddleware>();
+
+        public IApplicationBuilder UseRequestBodySanitizer() =>
+            app.UseMiddleware<RequestBodySanitizerMiddleware>();
+
+        public IApplicationBuilder UseRequestHeadersAndBodySanitizers() =>
+            app.UseRequestHeadersSanitizer().UseRequestBodySanitizer();
     }
 
-    public static RouteHandlerBuilder MapXssTopLevelBodyTestRoute(this WebApplication webApp, string injectedBodyUrl)
+    extension(WebApplication webApp)
     {
-        return webApp.MapPost(injectedBodyUrl, (HttpRequest request, TopLevelOnly body) => body);
-    }
-
-    public static RouteHandlerBuilder MapXssNestingBodyTestRoute(this WebApplication webApp, string injectedBodyUrl)
-    {
-        return webApp.MapPost(injectedBodyUrl, (HttpRequest request, IncludesNesting body) => body);
-    }
-
-    public static void AddXssAttackReportingTestMiddleware(this WebApplication webApp)
-    {
-        webApp.Run(async (HttpContext context) =>
+        public RouteHandlerBuilder MapXssHeaderTestRoute(string injectedHeadersUrl)
         {
-            var report = context.Features.Get<IXssThreatReport>();
-            var presentation = new MalicePresentation();
+            return 
+                webApp.MapGet(injectedHeadersUrl, (HttpRequest request) =>
+                    request.Headers.ToDictionary(
+                        keyValuePair => keyValuePair.Key,
+                        keyValuePair => keyValuePair.Value.ToString()));
+        }
 
-            if (report?.HasFindings is true)
+        public RouteHandlerBuilder MapXssTopLevelBodyTestRoute(string injectedBodyUrl)
+        {
+            return webApp.MapPost(injectedBodyUrl, (HttpRequest request, TopLevelOnly body) => body);
+        }
+
+        public RouteHandlerBuilder MapXssNestingBodyTestRoute(string injectedBodyUrl)
+        {
+            return webApp.MapPost(injectedBodyUrl, (HttpRequest request, IncludesNesting body) => body);
+        }
+
+        public void AddXssAttackReportingTestMiddleware()
+        {
+            webApp.Run(async (HttpContext context) =>
             {
-                foreach (var (location, original) in report.Findings)
-                {
-                    var entry = $"Potential XSS at {location}, original: {original}";
-                    presentation.Findings.Add(entry);
-                }
-            }
+                var report = context.Features.Get<IXssThreatReport>();
+                var presentation = new MalicePresentation();
 
-            await context.Response.WriteAsJsonAsync(presentation);
-        });
+                if (report?.HasFindings is true)
+                {
+                    foreach (var (location, original) in report.Findings)
+                    {
+                        var entry = $"Potential XSS at {location}, original: {original}";
+                        presentation.Findings.Add(entry);
+                    }
+                }
+
+                await context.Response.WriteAsJsonAsync(presentation);
+            });
+        }
     }
 }

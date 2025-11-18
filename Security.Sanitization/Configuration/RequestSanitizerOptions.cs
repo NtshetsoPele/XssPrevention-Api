@@ -2,5 +2,5 @@
 
 public sealed class RequestSanitizerOptions
 {
-    public bool DeepSanitization { get; set; } = false;
+    public bool DeepSanitization { get; set; }
 }

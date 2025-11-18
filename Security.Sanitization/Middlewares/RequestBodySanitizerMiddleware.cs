@@ -40,7 +40,7 @@ public sealed class RequestBodySanitizerMiddleware(
 
     private static bool IsJson(string? contentType) =>
         contentType is { } type && 
-        type.Contains(Constants.JsonContent, StringComparison.OrdinalIgnoreCase);
+        type.Contains(MediaTypeNames.Application.Json, StringComparison.OrdinalIgnoreCase);
 
     private static async Task<string> ReadBodyAsync(HttpRequest request)
     {

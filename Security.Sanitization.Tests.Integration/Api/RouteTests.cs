@@ -54,7 +54,7 @@ public sealed class RouteTests(WebApplicationFactory<Program> factory) :
     }
 
     private static StringContent CreateJsonContent(object payload) =>
-        new(JsonSerializer.Serialize(payload), Encoding.UTF8, Constants.JsonContent);
+        new(JsonSerializer.Serialize(payload), Encoding.UTF8, MediaTypeNames.Application.Json);
 
     private static TopLevelOnly CreateTopLevelRequest() =>
         new()

@@ -2,15 +2,16 @@
 
 public static class RequestSanitizerRegistrationExtensions
 {
-    public static IServiceCollection AddRequestSanitizer(
-        this IServiceCollection services,
-        Action<RequestSanitizerOptions>? configure = null)
+    extension(IServiceCollection services)
     {
-        var options = new RequestSanitizerOptions();
-        configure?.Invoke(options);
+        public IServiceCollection AddRequestSanitizer(Action<RequestSanitizerOptions>? configure = null)
+        {
+            var options = new RequestSanitizerOptions();
+            configure?.Invoke(options);
 
-        return services
-            .AddSingleton(options)
-            .AddSingleton<IInputSanitizer, HtmlInputSanitizer>();
+            return services
+                .AddSingleton(options)
+                .AddSingleton<IInputSanitizer, HtmlInputSanitizer>();
+        }
     }
 }

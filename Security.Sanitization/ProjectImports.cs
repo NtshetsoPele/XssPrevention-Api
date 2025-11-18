@@ -1,9 +1,9 @@
 ﻿global using Ganss.Xss;
 global using System.Text;
 global using System.Text.Json;
+global using System.Net.Mime;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Builder;
-global using Security.Sanitization.Shared;
 global using Security.Sanitization.Models;
 global using System.Collections.Concurrent;
 global using Security.Sanitization.Sanitizers;

@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     
     <PackageId>Security.Sanitization</PackageId>
-    <Version>2.1.4</Version>
+    <Version>3.0.0</Version>
     <Authors>Curious Technical Team</Authors>
     <Company>Curious</Company>
     <Description>Middleware to sanitize HTTP headers and JSON request bodies</Description>
